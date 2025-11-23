@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Joke App</title>
+  <style>
+    #ld{display:none; font-weight:bold;}
+    #jk{margin:10px 0; font-size:18px;}
+  </style>
+</head>
+<body>
+
+<h2>Random Joke</h2>
+
+<div id="jk"></div>
+<div id="ld">Loading...</div>
+
+<button id="btn">Next Joke</button>
+
+<script>
+  const jk = document.getElementById("jk");
+  const btn = document.getElementById("btn");
+  const ld = document.getElementById("ld");
+
+  function getJk() {
+    btn.disabled = true;
+    ld.style.display = "block";
+    jk.innerHTML = "";
+
+    fetch("https://official-joke-api.appspot.com/random_joke")
+      .then(r => r.json())
+      .then(d => {
+        jk.innerHTML = `<b>${d.setup}</b><br>${d.punchline}`;
+      })
+      .catch(e => {
+        jk.innerHTML = "Error loading joke!";
+      })
+      .finally(() => {
+        ld.style.display = "none";
+        btn.disabled = false;
+      });
+  }
+
+  btn.addEventListener("click", getJk);
+  getJk();
+</script>
+
+</body>
+</html>
